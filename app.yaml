@@ -1,0 +1,13 @@
+application: gradleplease
+version: 3
+runtime: go
+api_version: go1
+
+handlers:
+- url: /
+  upload: index.html
+  static_files: static/index.html
+- url: /static
+  static_dir: static
+- url: /.*
+  script: _go_app

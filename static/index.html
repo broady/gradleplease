@@ -1,0 +1,194 @@
+<!doctype html>
+<title>Gradle, please</title>
+<meta charset="utf-8">
+<style>
+@import url(http://fonts.googleapis.com/css?family=Inconsolata|Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
+
+body {
+	background: #eee;
+	text-align: center;
+}
+a:link, a:visited {
+	color: #69c;
+}
+#feedback img {
+	height: 2em;
+	vertical-align: middle;
+	cursor: pointer;
+	border-radius: 50%;
+	box-shadow: 1px 1px 5px #ccc;
+}
+#feedback.disabled {
+	opacity: .2;
+}
+#feedback.disabled img {
+	cursor: default;
+}
+#feedback img:hover {
+	background: white;
+}
+#main {
+	max-width: 45em;
+	background: white;
+	color: #444;
+	padding: 2em;
+	margin: 2em auto;
+	text-align: left;
+	font-family: Roboto, sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 19px;
+}
+pre {
+	font-family: Inconsolata, monospace;
+}
+pre, #popular, p.content {
+	background: #eee;
+	border: 1px solid #ccc;
+	margin: 1em 0 2em 0;
+	padding: .5em;
+}
+body h1 {
+	margin-bottom: 1em;
+}
+h1, h2 {
+	color: black;
+	font-size: 2.2em;
+	font-weight: 100;
+	margin: 0;
+}
+h2 {
+	font-size: 1.5em;
+	position: relative;
+	line-height: 1.5em;
+}
+input {
+	font-family: Inconsolata, monospace;
+	font-size: 1em;
+	right: 0;
+	left: 200px;
+	position: absolute;
+}
+.attrib {
+	font-style: oblique;
+	color: #999;
+	font-size: .9em;
+}
+#social {
+	position: relative;
+	top: -10px;
+	text-align: right;
+	float: right;
+}
+#author {
+	text-align: right;
+}
+#author a {
+	text-decoration: none;
+}
+#author img {
+	border-radius: 50%;
+	vertical-align: bottom;
+}
+#didyoumean {
+	color: #c33;
+	font-style: oblique;
+	display: none;
+	padding-left: 200px;
+}
+#didyoumean span, #popular li {
+	color: #369;
+	text-decoration: underline;
+	cursor: pointer;
+}
+#popular {
+	padding: .5em;
+	margin: 1em 0;
+}
+#popular li {
+	display: inline;
+	margin-right: .8em;
+}
+#apklibmessage {
+	padding: .5em;
+	background: lemonchiffon;
+	border: 1px solid #ccc;
+	display: none;
+}
+</style>
+
+<div id="main">
+<div id="social">
+<div class="g-plusone" data-align="right" data-width="350" data-annotation="inline" data-size="medium" data-expandTo="left"></div><br>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="broady" data-align="right" data-hashtags="AndroidDev" data-dnt="true">Tweet</a>
+</div>
+<h1>Gradle, please</h1>
+<pre>
+dependencies {
+    // Google Play Services
+    compile 'com.google.android.gms:play-services:3.2.65' 
+
+    // Support Libraries
+    compile 'com.android.support:support-v4:18.0.0'
+    compile 'com.android.support:appcompat-v7:18.0.0'
+    compile 'com.android.support:gridlayout-v7:18.0.0'
+    compile 'com.android.support:support-v7-mediarouter:18.0.0'
+    compile 'com.android.support:support-v13:18.0.0'
+
+    // Note: these libraries require the "Google Repository" and "Android Repository"
+    //       to be installed via the SDK manager.
+}
+</pre>
+
+<h2>Something else?
+<input tabIndex="0" id="search" value="actionbarsherlock">
+</h2>
+<div id="didyoumean">Did you mean <span></span>?</div>
+<pre id="suggestion">
+dependencies {
+    compile '<span>com.actionbarsherlock:actionbarsherlock:4.4.0@aar</span>'
+}
+
+<div id="feedback">// Was this result helpful? <img src="static/bad.svg" id="feedback-bad"> <img src="static/good.svg" id="feedback-good"></div></pre>
+
+<p id="apklibmessage">Looks like the package <code><span></span></code> is an apklib! You should ask the author to make an <code>aar</code> available on Maven Central.</p>
+
+<h2>Popular</h2>
+<ul id="popular">
+	<li>gson</li>
+	<li>actionbarsherlock</li>
+	<li>joda-time</li>
+	<li>picasso</li>
+	<li>otto</li>
+	<li>slf4j</li>
+	<li>crouton</li>
+	<li>nineoldandroids</li>
+	<li>butterknife</li>
+	<li>guava</li>
+	<li>okhttp</li>
+	<li>dagger</li>
+</ul>
+
+<h2>Where do the results come from?</h2>
+<p class="content">Maven Central. To have your library listed here (and have people include your library easily), upload your project to <a href="http://search.maven.org/">Maven Central</a>. The easiest way to do this is via <a href="https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide">Sonatype</a>.</p>
+
+<p class="attrib">Portions of this page are reproduced from work created and <a href="http://code.google.com/policies.html">shared by the Android Open Source Project</a> and used according to terms described in the <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons 2.5 Attribution License</a>.</p>
+<p class="attrib" id="author">by <a href="http://google.com/+ChristopherBroadfoot">Chris Broadfoot <img src="https://lh6.googleusercontent.com/-eH_xCqel-9w/AAAAAAAAAAI/AAAAAAAAKZw/xa0bi10dKXA/photo.jpg?sz=50"></a></p>
+</div>
+
+<script src="static/app.js"></script>
+
+<script src="//www.google.com/js/gweb/analytics/autotrack.js"></script>
+<script>
+analytics = new gweb.analytics.AutoTrack({
+  profile: 'UA-43442887-1'
+});
+</script>
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
