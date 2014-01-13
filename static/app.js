@@ -1,3 +1,6 @@
+var gmsVersion = '4.0.30';
+var frameworkVersion = '19.0.1';
+
 var defaultQuery = 'actionbarsherlock';
 var previousInputValue = defaultQuery;
 var query = defaultQuery;
@@ -25,6 +28,17 @@ var sessionId = parseInt(Math.random() * 1e16);
 			s.focus();
 		}
 	};
+})();
+
+(function replaceStaticVersions() {
+	var gms = document.querySelectorAll('.gmsversion');
+	for (var i = 0; i < gms.length; i++) {
+		gms[i].innerHTML = gmsVersion;
+	}
+	var fw = document.querySelectorAll('.frameworkversion');
+	for (var i = 0; i < fw.length; i++) {
+		fw[i].innerHTML = frameworkVersion;
+	}
 })();
 
 function usePopular(e) {
@@ -67,12 +81,12 @@ var searchesThisSession = 0;
 function search(q) {
 	if (q.indexOf('play') != -1 || q.indexOf('gms') != -1 || q.indexOf('gcm') != -1) {
 		analytics.trackEvent('search', 'overriden', query, ++searchesThisSession);
-		update('com.google.android.gms:play-services:3.2.25');
+		update('com.google.android.gms:play-services:' + gmsVersion);
 		return;
 	}
 	if (q.indexOf('compat') != -1) {
 		analytics.trackEvent('search', 'overriden', query, ++searchesThisSession);
-		update('com.android.support:appcompat-v7:18.0.0');
+		update('com.android.support:appcompat-v7:' + frameworkVersion);
 		return;
 	}
 	query = q;
