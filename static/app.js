@@ -1,4 +1,4 @@
-var gmsVersion = '4.0.30';
+var gmsVersion = '4.1.32';
 var frameworkVersion = '19.0.1';
 
 var defaultQuery = 'actionbarsherlock';
