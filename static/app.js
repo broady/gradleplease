@@ -175,5 +175,6 @@ overrides = {
   'svg': 'svg-android',
   'commons': 'g:org.apache.commons commons-lang',
   'commons-lang': 'g:org.apache.commons commons-lang',
-  'picasso': 'squareup picasso'
+  'picasso': 'squareup picasso',
+  'guava': 'com.google guava''
 }
