@@ -1,5 +1,5 @@
 var gmsVersion = '4.3.23';
-var frameworkVersion = '19.0.1';
+var frameworkVersion = '19.1.0';
 
 var defaultQuery = 'actionbarsherlock';
 var previousInputValue = defaultQuery;
