@@ -2,7 +2,10 @@ var gmsVersion = '4.3.23';
 var frameworkVersion = '19.1.0';
 
 var hashQuery;
-if (window.location.hash.length > 1) {
+var iframe = window.location.pathname.indexOf('/embed/') == 0;
+if (iframe) {
+  hashQuery = decodeURIComponent(window.location.pathname.substring(7));
+} else if (window.location.hash.length > 1) {
   hashQuery = window.location.hash.substring(1);
 }
 var defaultQuery = hashQuery || 'actionbarsherlock';
@@ -11,6 +14,13 @@ var query = hashQuery || defaultQuery;
 var sessionId = parseInt(Math.random() * 1e16);
 
 (function() {
+  if (iframe) {
+    document.querySelector('#powered').href += '#' + hashQuery;
+    setTimeout(function() {
+      search(hashQuery);
+    }, 1);
+    return;
+  }
   var queryTimeout;
   var s = document.querySelector('#search');
   if (hashQuery) {
@@ -90,7 +100,9 @@ function setFeedbackEnabled(enabled) {
 var searchesThisSession = 0;
 
 function search(q) {
-  window.location.hash = q;
+  if (!iframe) {
+    window.location.hash = q;
+  }
   if (q.indexOf('play') != -1 || q.indexOf('gms') != -1 || q.indexOf('gcm') != -1) {
     analytics.trackEvent('search', 'overriden', query, ++searchesThisSession);
     update('com.google.android.gms:play-services:' + gmsVersion);
@@ -102,8 +114,10 @@ function search(q) {
     return;
   }
   query = q;
-  document.querySelector('#apklibmessage').style.display = 'none';
-  setFeedbackEnabled(false);
+  if (!iframe) {
+    document.querySelector('#apklibmessage').style.display = 'none';
+    setFeedbackEnabled(false);
+  }
   analytics.trackEvent('search', 'search', query, ++searchesThisSession);
   if (overrides[q]) {
     query = overrides[q];
@@ -121,7 +135,9 @@ function update(s) {
 }
 
 function searchCallback(data) {
-  setFeedbackEnabled(true);
+  if (!iframe) {
+    setFeedbackEnabled(true);
+  }
   if (data.error) {
     console.log(data.error);
     return sadface();
@@ -130,11 +146,13 @@ function searchCallback(data) {
     // Response returned out of order
     return;
   }
-  if (data.spellcheck && data.spellcheck.suggestions && data.spellcheck.suggestions[1] && data.spellcheck.suggestions[1].suggestion.length) {
-    document.querySelector('#didyoumean').style.display = 'block';
-    document.querySelector('#didyoumean span').textContent = data.spellcheck.suggestions[1].suggestion[0];
-  } else {
-    document.querySelector('#didyoumean').style.display = 'none';
+  if (!iframe) {
+    if (data.spellcheck && data.spellcheck.suggestions && data.spellcheck.suggestions[1] && data.spellcheck.suggestions[1].suggestion.length) {
+      document.querySelector('#didyoumean').style.display = 'block';
+      document.querySelector('#didyoumean span').textContent = data.spellcheck.suggestions[1].suggestion[0];
+    } else {
+      document.querySelector('#didyoumean').style.display = 'none';
+    }
   }
   if (!data.response || !data.response.docs || !data.response.docs.length) {
     return sadface();
@@ -147,7 +165,7 @@ function searchCallback(data) {
     }
     return apklibwithaar || artifact.p != 'pom' && artifact.p != 'apklib' && artifact.a.indexOf('sample') == -1;
   });
-  if (showApklibMessage) {
+  if (!iframe && showApklibMessage) {
     document.querySelector('#apklibmessage span').textContent = showApklibMessage.id;
     document.querySelector('#apklibmessage').style.display = 'block';
     if (!docs.length) {
