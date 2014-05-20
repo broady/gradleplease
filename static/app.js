@@ -1,14 +1,25 @@
 var gmsVersion = '4.3.23';
 var frameworkVersion = '19.1.0';
 
-var defaultQuery = 'actionbarsherlock';
+var hashQuery;
+if (window.location.hash.length > 1) {
+  hashQuery = window.location.hash.substring(1);
+}
+var defaultQuery = hashQuery || 'actionbarsherlock';
 var previousInputValue = defaultQuery;
-var query = defaultQuery;
+var query = hashQuery || defaultQuery;
 var sessionId = parseInt(Math.random() * 1e16);
 
 (function() {
   var queryTimeout;
   var s = document.querySelector('#search');
+  if (hashQuery) {
+    s.value = hashQuery;
+    setTimeout(function() {
+      search(hashQuery);
+    }, 1);
+    update('...');
+  }
   s.focus();
   s.onchange = s.onkeyup = function() {
     if (previousInputValue == s.value || !s.value) return;
@@ -79,6 +90,7 @@ function setFeedbackEnabled(enabled) {
 var searchesThisSession = 0;
 
 function search(q) {
+  window.location.hash = q;
   if (q.indexOf('play') != -1 || q.indexOf('gms') != -1 || q.indexOf('gcm') != -1) {
     analytics.trackEvent('search', 'overriden', query, ++searchesThisSession);
     update('com.google.android.gms:play-services:' + gmsVersion);
