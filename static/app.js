@@ -1,4 +1,4 @@
-var gmsVersion = '4.4.52';
+var gmsVersion = '5.0.77';
 var frameworkVersion = '19.1.0';
 
 var hashQuery;
