@@ -1,5 +1,5 @@
-var gmsVersion = '5.0.77';
-var frameworkVersion = '19.1.0';
+var gmsVersion = '6.1.11';
+var frameworkVersion = '21.0.0';
 
 var hashQuery;
 var iframe = window.location.pathname.indexOf('/embed/') == 0;
