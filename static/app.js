@@ -197,7 +197,9 @@ overrides = {
   'slf4j-android': 'org.slf4j slf4j-android',
   'animation': 'com.nineoldandroids library',
   'ormlite': 'com.j256.ormlite ormlite-android',
-  'pulltorefresh': 'actionbarpulltorefresh',
+  'pulltorefresh': 'chrisbanes actionbarpulltorefresh',
+  'actionbarpulltorefresh': 'chrisbanes actionbarpulltorefresh',
+  'facebook': 'facebook android',
   'wire': 'wire-runtime',
   'tape': 'squareup tape',
   'holoeverywhere': 'holoeverywhere library',
@@ -207,5 +209,6 @@ overrides = {
   'commons-lang': 'g:org.apache.commons commons-lang',
   'picasso': 'squareup picasso',
   'guava': 'com.google guava',
+  'espresso': 'jakewharton espresso',
   'eventbus': 'greenrobot eventbus'
 }
