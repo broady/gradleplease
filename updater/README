@@ -1,0 +1,9 @@
+This utility updates the Play services and Support libraries versions on the production website.
+
+$ go run update_versions.go get_versions.go
+
+`CLOUD_PRIVATE_KEY` needs to be set. For example:
+$ export CLOUD_PRIVATE_KEY=~/Downloads/gradleplease-*.json
+
+This file can be obtained/generated from here:
+https://console.developers.google.com/project/gradleplease/apiui/credential
