@@ -123,6 +123,7 @@ func appjsHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	w.Header().Set("Content-Type", "application/javascript")
 	w.Header().Set("Cache-Control", "max-age: 10800, public")
 	if err := appjsTmpl.Execute(w, v); err != nil {
 		c.Errorf("could not write app.js tmpl: %q", err)
