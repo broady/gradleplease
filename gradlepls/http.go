@@ -2,28 +2,32 @@ package gradlepls
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"text/template"
 	"time"
-	"io/ioutil"
-	"fmt"
 
 	"appengine"
 	"appengine/datastore"
-	"appengine/urlfetch"
 	"appengine/memcache"
+	"appengine/urlfetch"
 )
 
 func init() {
 	http.HandleFunc("/search", searchHandler)
 	http.HandleFunc("/feedback", feedbackHandler)
+	http.HandleFunc("/app.js", appjsHandler)
 }
+
+var appjsTmpl = template.Must(template.ParseFiles("app.js"))
 
 type BaseLog struct {
 	Timestamp time.Time
-	Session	string
+	Session   string
 	UserAgent string
-	IP string
+	IP        string
 }
 
 type Search struct {
@@ -33,7 +37,7 @@ type Search struct {
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	item, _ := memcache.Get(c, r.FormValue("q"))
+	item, _ := memcache.Get(c, "_"+r.FormValue("q"))
 	if item == nil {
 		c.Infof("cache miss: %s", r.FormValue("q"))
 		client := urlfetch.Client(c)
@@ -57,8 +61,8 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		item = &memcache.Item{
-			Key: r.FormValue("q"),
-			Value: body,
+			Key:        "_" + r.FormValue("q"),
+			Value:      body,
 			Expiration: time.Hour * 3,
 		}
 		if err := memcache.Set(c, item); err != nil {
@@ -66,7 +70,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	fmt.Fprintf(w, "searchCallback(%s)", item.Value)
-	s := &Search {
+	s := &Search{
 		Query: r.FormValue("q"),
 	}
 	s.fill(r)
@@ -78,17 +82,59 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 type Feedback struct {
 	BaseLog
-	Query string
+	Query  string
 	Result string
-	Good string
+	Good   string
+}
+
+type VersionInfo struct {
+	PlayServicesVersion   string
+	AndroidSupportVersion string
+}
+
+func appjsHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	v := &VersionInfo{"+", "+"}
+	item, _ := memcache.Get(c, "_"+r.FormValue("q"))
+	if item == nil {
+		k := datastore.NewKey(c, "VersionInfo", "info", 0, nil)
+		if err := datastore.Get(c, k, v); err != nil {
+			c.Errorf("could not fetch versioninfo: %v", err)
+			appjsTmpl.Execute(w, v)
+			return
+		}
+		body, err := json.Marshal(k)
+		if err != nil {
+			c.Errorf("could not marshal versioninfo for memcache: %v", err)
+			appjsTmpl.Execute(w, v)
+			return
+		}
+		item = &memcache.Item{
+			Key:        "m2versions",
+			Value:      body,
+			Expiration: time.Hour * 3,
+		}
+		if err := memcache.Set(c, item); err != nil {
+			c.Warningf("could not set item %s: %v", item.Key, err)
+		}
+	} else {
+		if err := json.Unmarshal(item.Value, v); err != nil {
+			fmt.Fprintf(w, "TODO error: %v", err)
+			return
+		}
+	}
+	w.Header().Set("Cache-Control", "max-age: 10800, public")
+	if err := appjsTmpl.Execute(w, v); err != nil {
+		c.Errorf("could not write app.js tmpl: %q", err)
+	}
 }
 
 func feedbackHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	f := &Feedback {
-		Query: r.FormValue("q"),
+	f := &Feedback{
+		Query:  r.FormValue("q"),
 		Result: r.FormValue("result"),
-		Good: r.FormValue("good"),
+		Good:   r.FormValue("good"),
 	}
 	f.fill(r)
 	k := datastore.NewIncompleteKey(c, "Feedback", nil)

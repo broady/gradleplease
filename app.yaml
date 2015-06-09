@@ -1,5 +1,5 @@
 application: gradleplease
-version: 3
+version: 4
 runtime: go
 api_version: go1
 
