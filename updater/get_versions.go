@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/blang/semver"
+	"github.com/cheggaaa/pb"
 )
 
 const (
@@ -119,7 +120,11 @@ func getFile(filename string, shouldCache bool) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	b, err := ioutil.ReadAll(resp.Body)
+	bar := pb.New(int(resp.ContentLength)).SetUnits(pb.U_BYTES)
+	bar.ShowSpeed = true
+	bar.ShowTimeLeft = true
+	bar.Start()
+	b, err := ioutil.ReadAll(bar.NewProxyReader(resp.Body))
 	if err != nil {
 		return nil, err
 	}
