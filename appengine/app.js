@@ -1,3 +1,9 @@
+if (!analytics) {
+  analytics = {
+    trackEvent: function() {}
+  };
+}
+
 var gmsVersion = '{{.PlayServicesVersion}}';
 var frameworkVersion = '{{.AndroidSupportVersion}}';
 
