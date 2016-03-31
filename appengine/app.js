@@ -216,5 +216,6 @@ overrides = {
   'picasso': 'squareup picasso',
   'guava': 'com.google guava',
   'espresso': 'jakewharton espresso',
-  'eventbus': 'greenrobot eventbus'
+  'eventbus': 'greenrobot eventbus',
+  'okhttp3': 'g:com.squareup.okhttp3 okhttp'
 }
