@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -78,6 +79,10 @@ func getVersions() (*VersionInfo, error) {
 	return v, err
 }
 
+var versionsToIgnore = map[string]bool{
+	"alpha1": true,
+}
+
 func getLatestVersion(zipFile []byte, prefix, suffix string) (string, error) {
 	r, err := zip.NewReader(bytes.NewReader(zipFile), int64(len(zipFile)))
 	if err != nil {
@@ -88,12 +93,15 @@ func getLatestVersion(zipFile []byte, prefix, suffix string) (string, error) {
 		artifact := path.Base(f.Name)
 		if strings.HasPrefix(artifact, prefix) && strings.HasSuffix(artifact, suffix) {
 			v := extractVersion(artifact)
+			if _, ok := versionsToIgnore[v]; ok {
+				continue
+			}
 			if latest == "" {
 				latest = v
 			}
 			v1, err := semver.Parse(v)
 			if err != nil {
-				return "", err
+				return "", fmt.Errorf("%q %v", v, err)
 			}
 			l := semver.MustParse(latest)
 			if v1.GT(l) {
