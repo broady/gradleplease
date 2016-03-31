@@ -12,7 +12,7 @@ var iframe = window.location.pathname.indexOf('/embed/') == 0;
 if (iframe) {
   hashQuery = decodeURIComponent(window.location.pathname.substring(7));
 } else if (window.location.hash.length > 1) {
-  hashQuery = window.location.hash.substring(1);
+  hashQuery = decodeURIComponent(window.location.hash.substring(1));
 }
 var defaultQuery = hashQuery || 'actionbarsherlock';
 var previousInputValue = defaultQuery;
@@ -107,7 +107,7 @@ var searchesThisSession = 0;
 
 function search(q) {
   if (!iframe) {
-    window.location.hash = q;
+    window.location.hash = encodeURIComponent(q);
   }
   if (q.indexOf('play') != -1 || q.indexOf('gms') != -1 || q.indexOf('gcm') != -1) {
     analytics.trackEvent('search', 'overriden', query, ++searchesThisSession);
