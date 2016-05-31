@@ -81,6 +81,8 @@ func getVersions() (*VersionInfo, error) {
 
 var versionsToIgnore = map[string]bool{
 	"alpha1": true,
+	"alpha2": true,
+	"beta1":  true,
 }
 
 func getLatestVersion(zipFile []byte, prefix, suffix string) (string, error) {
