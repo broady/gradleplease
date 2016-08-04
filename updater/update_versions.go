@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"google.golang.org/cloud/datastore"
+	"cloud.google.com/go/datastore"
 )
 
 type VersionInfo struct {
